@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
@@ -16,6 +16,12 @@ import Link from "next/link"
 export default function AuthPage() {
   const router = useRouter()
   const [userType, setUserType] = useState("company")
+
+   useEffect(() => {
+      if (typeof window !== "undefined") {
+        localStorage.setItem("theme", "light");
+      }
+    }, []);
 
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-background via-background to-primary/5">

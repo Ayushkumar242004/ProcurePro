@@ -42,7 +42,7 @@ export default function ClientLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} ${poppins.variable} font-sans antialiased`}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange={false}>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange={false}>
           <div className="relative min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
             { /* Conditionally render for auth page*/}
             { !isAuthPage && <Navigation />}
