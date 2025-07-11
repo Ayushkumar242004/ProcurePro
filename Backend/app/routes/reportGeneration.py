@@ -124,7 +124,7 @@ async def generate_esg_report(data: ESGReportInput):
     # 7. Prepare and send email
     msg = MIMEMultipart()
     msg["From"] = "ayukumar242004@gmail.com"
-    msg["To"] = "tbsingh4249@gmail.com"
+    msg["To"] = "ayush.kumar47@techmahindra.com"
     msg["Subject"] = f"ESG Report for {data.company_name}"
     msg.attach(MIMEText("Hello,\n\nPlease find attached the ESG report.\n\nRegards,\nProcurePro"))
 
