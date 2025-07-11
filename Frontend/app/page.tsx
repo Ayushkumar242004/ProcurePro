@@ -506,6 +506,7 @@ export default function Dashboard() {
   const { userData, isAuthenticated } = useAuth()
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
     const userData = localStorage.getItem("userData")
     if (userData) {
       const user = JSON.parse(userData)

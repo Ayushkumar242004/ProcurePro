@@ -161,6 +161,7 @@ export default function CostEfficiencyAnalysis() {
     useEffect(() => {
         const fetchProfileAndSetCompany = async () => {
             try {
+                 if (typeof window === "undefined") return;
                 const token = localStorage.getItem("token");
                 if (!token) {
                     throw new Error("No authentication token found");
@@ -185,6 +186,7 @@ export default function CostEfficiencyAnalysis() {
                 if (companyName) {
                     // Set selectedSupplier
                     setSelectedSupplier(companyName);
+                     if (typeof window === "undefined") return;
                     // Optionally store in localStorage
                     localStorage.setItem("company_name", companyName);
 
@@ -368,6 +370,7 @@ export default function CostEfficiencyAnalysis() {
     //company
 
     useEffect(() => {
+         if (typeof window === "undefined") return;
         const userData = JSON.parse(localStorage.getItem("userData") || "{}");
         
         if (userData.role === "Supplier") return;
@@ -383,6 +386,7 @@ export default function CostEfficiencyAnalysis() {
     }, []);
 
     useEffect(() => {
+         if (typeof window === "undefined") return;
         const userData = JSON.parse(localStorage.getItem("userData") || "{}");
         if (userData.role === "Supplier") return;
 
@@ -461,7 +465,22 @@ export default function CostEfficiencyAnalysis() {
   }
 }, []);
 
+const [userRole, setUserRole] = useState<string | null>(null);
 
+useEffect(() => {
+  if (typeof window !== "undefined") {
+    const storedData = localStorage.getItem("userData");
+    if (storedData) {
+      try {
+        const parsed = JSON.parse(storedData);
+        setUserRole(parsed?.role || null);
+      } catch (err) {
+        console.error("Error parsing userData:", err);
+        setUserRole(null);
+      }
+    }
+  }
+}, []);
 
     return (
         <div className="relative pt-20 min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
@@ -480,7 +499,7 @@ export default function CostEfficiencyAnalysis() {
                     </p>
                 </motion.div>
 
-                {JSON.parse(localStorage.getItem("userData") || "{}")?.role !== "Supplier" && (
+                {userRole !== "Supplier" && (
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}

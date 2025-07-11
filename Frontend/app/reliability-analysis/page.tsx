@@ -171,6 +171,7 @@ export default function ReliabilityAnalysis() {
                     // Set selectedSupplier
                     setSelectedSupplier(companyName);
                     // Optionally store in localStorage
+                     if (typeof window === "undefined") return;
                     localStorage.setItem("company_name", companyName);
 
                     // Find supplier with this name
@@ -342,6 +343,7 @@ export default function ReliabilityAnalysis() {
     //company
 
     useEffect(() => {
+         if (typeof window === "undefined") return;
         const userData = JSON.parse(localStorage.getItem("userData") || "{}");
 
         if (userData.role === "Supplier") return;
@@ -357,6 +359,7 @@ export default function ReliabilityAnalysis() {
     }, []);
 
     useEffect(() => {
+         if (typeof window === "undefined") return;
         const userData = JSON.parse(localStorage.getItem("userData") || "{}");
         if (userData.role === "Supplier") return;
 
@@ -413,7 +416,22 @@ export default function ReliabilityAnalysis() {
         setReliabilityScoreC(parseFloat(reliabilityScoreCal.toFixed(2)));
     }, [selectedSupplierC, suppliersC]);
 
+const [userRole, setUserRole] = useState<string | null>(null);
 
+useEffect(() => {
+  if (typeof window !== "undefined") {
+    const storedData = localStorage.getItem("userData");
+    if (storedData) {
+      try {
+        const parsed = JSON.parse(storedData);
+        setUserRole(parsed?.role || null);
+      } catch (err) {
+        console.error("Error parsing userData:", err);
+        setUserRole(null);
+      }
+    }
+  }
+}, []);
     return (
         <div className="relative pt-20 min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
             <div className="container mx-auto p-6 space-y-8">
@@ -431,7 +449,7 @@ export default function ReliabilityAnalysis() {
                     </p>
                 </motion.div>
 
-                {JSON.parse(localStorage.getItem("userData") || "{}")?.role !== "Supplier" && (
+                {userRole !== "Supplier" && (
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}

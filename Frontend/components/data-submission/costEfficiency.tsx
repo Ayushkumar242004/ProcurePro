@@ -19,8 +19,7 @@ const sections = [
   { id: "documents", title: "Documents", icon: Upload, description: "Supporting documentation" }
 ]
 
-const userData = JSON.parse(localStorage.getItem("userData") || "{}");
-const email = userData.email;
+
 
 export default function CostEfficiency() {
 
@@ -70,6 +69,30 @@ export default function CostEfficiency() {
       [sectionId]: !prev[sectionId]
     }))
   };
+
+  
+    type UserData = {
+      email: string;
+      role: string;
+    };
+    
+    const [userData, setUserData] = useState<UserData | null>(null);
+    useEffect(() => {
+      if (typeof window !== "undefined") {
+        const storedData = localStorage.getItem("userData");
+        if (storedData) {
+          try {
+            const parsedData = JSON.parse(storedData);
+            setUserData(parsedData);
+          } catch (err) {
+            console.error("Failed to parse userData from localStorage", err);
+            setUserData(null);
+          }
+        }
+      }
+    }, []);
+    const email = userData?.email ?? "";
+  
 
   const updateCostFormFields = (data: any) => {
     // Cost Metrics
@@ -156,7 +179,7 @@ export default function CostEfficiency() {
 
     const formData = new FormData();
     formData.append("file", file);
-
+     if (typeof window === "undefined") return;
     // Get email from localStorage (or any other auth provider)
     const userData = JSON.parse(localStorage.getItem("userData") || "{}");
     const email = userData.email || "";

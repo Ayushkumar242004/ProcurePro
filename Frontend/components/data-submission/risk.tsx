@@ -25,8 +25,6 @@ const sections = [
   { id: "documents", title: "Documents", icon: Upload, description: "Supporting documentation" }
 ]
 
-const userData = JSON.parse(localStorage.getItem("userData") || "{}");
-const email = userData.email;
 
 export default function Risk() {
   // Operational Risk State
@@ -96,6 +94,27 @@ export default function Risk() {
   const [uploadedFiles, setUploadedFiles] = useState<{ riskDocument?: File }>({});
 
 
+type UserData = {
+  email: string;
+  role: string;
+};
+
+const [userData, setUserData] = useState<UserData | null>(null);
+useEffect(() => {
+  if (typeof window !== "undefined") {
+    const storedData = localStorage.getItem("userData");
+    if (storedData) {
+      try {
+        const parsedData = JSON.parse(storedData);
+        setUserData(parsedData);
+      } catch (err) {
+        console.error("Failed to parse userData from localStorage", err);
+        setUserData(null);
+      }
+    }
+  }
+}, []);
+const email = userData?.email ?? "";
 
   const [expandedSections, setExpandedSections] = useState({
     operational: true,
@@ -240,6 +259,7 @@ export default function Risk() {
   console.log("File to upload:", file);
 
   try {
+    if (typeof window === "undefined") return;
     // Step 1: Upload file to /submit-risk-report
     const formData = new FormData();
     formData.append("file", file);

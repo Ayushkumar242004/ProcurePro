@@ -127,6 +127,7 @@ export default function RiskAnalysis() {
     useEffect(() => {
         const fetchProfileAndSetCompany = async () => {
             try {
+                 if (typeof window === "undefined") return;
                 const token = localStorage.getItem("token");
                 if (!token) {
                     throw new Error("No authentication token found");
@@ -152,6 +153,7 @@ export default function RiskAnalysis() {
                     // Set selectedSupplier
                     setSelectedSupplier(companyName);
                     // Optionally store in localStorage
+                     if (typeof window === "undefined") return;
                     localStorage.setItem("company_name", companyName);
 
                     // Find supplier with this name
@@ -284,6 +286,7 @@ export default function RiskAnalysis() {
     //company
 
     useEffect(() => {
+         if (typeof window === "undefined") return;
         const userData = JSON.parse(localStorage.getItem("userData") || "{}");
 
         if (userData.role === "Supplier") return;
@@ -299,6 +302,7 @@ export default function RiskAnalysis() {
     }, []);
 
     useEffect(() => {
+         if (typeof window === "undefined") return;
         const userData = JSON.parse(localStorage.getItem("userData") || "{}");
         if (userData.role === "Supplier") return;
 
@@ -327,7 +331,22 @@ export default function RiskAnalysis() {
         }
     }, []);
 
+const [userRole, setUserRole] = useState<string | null>(null);
 
+useEffect(() => {
+  if (typeof window !== "undefined") {
+    const storedData = localStorage.getItem("userData");
+    if (storedData) {
+      try {
+        const parsed = JSON.parse(storedData);
+        setUserRole(parsed?.role || null);
+      } catch (err) {
+        console.error("Error parsing userData:", err);
+        setUserRole(null);
+      }
+    }
+  }
+}, []);
 
 
     return (
@@ -347,7 +366,7 @@ export default function RiskAnalysis() {
                     </p>
                 </motion.div>
 
-                {JSON.parse(localStorage.getItem("userData") || "{}")?.role !== "Supplier" && (
+                {userRole  !== "Supplier" && (
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}

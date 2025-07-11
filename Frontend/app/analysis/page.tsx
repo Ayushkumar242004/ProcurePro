@@ -38,9 +38,10 @@ const tabConfig = [
   }
 ];
 
-const userData = JSON.parse(localStorage.getItem("userData") || "{}");
-const email = userData.email ; 
-const role = userData.role ; 
+type UserData = {
+  email: string;
+  role: string;
+};
 
 export default function analysis( ){
     const [activeTab, setActiveTab] = useState("ESG") ; 
@@ -50,6 +51,26 @@ export default function analysis( ){
     const [userRole, setUserRole] = useState("");
     const [userEmail, setUserEmail] = useState("");
 
+        
+const [userData, setUserData] = useState<UserData | null>(null);
+
+
+useEffect(() => {
+  if (typeof window !== "undefined") {
+    const storedData = localStorage.getItem("userData");
+    if (storedData) {
+      try {
+        const parsedData = JSON.parse(storedData);
+        setUserData(parsedData);
+      } catch (err) {
+        console.error("Failed to parse userData from localStorage", err);
+        setUserData(null);
+      }
+    }
+  }
+}, []);
+const email = userData?.email ?? "";
+const role = userData?.role ?? "";
 
     // Initialize user data
     useEffect(() => {

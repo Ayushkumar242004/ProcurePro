@@ -43,6 +43,7 @@ export function Navigation() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
   useEffect(() => {
+    if (typeof window === "undefined") return;
     // Only redirect to guidance if user is authenticated and not already on guidance page
     if (isAuthenticated && userData && pathname !== "/guidance") {
       const guidanceKey = `guidance_completed_${userData.email}_${userData.role}`

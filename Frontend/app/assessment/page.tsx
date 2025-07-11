@@ -171,6 +171,7 @@ export default function AssessmentPage() {
   useEffect(() => {
     const fetchProfileAndSetCompany = async () => {
       try {
+         if (typeof window === "undefined") return;
         const token = localStorage.getItem("token");
         if (!token) {
           throw new Error("No authentication token found");
@@ -195,6 +196,7 @@ export default function AssessmentPage() {
         if (companyName) {
           // Set selectedSupplier
           setSelectedSupplier(companyName);
+           if (typeof window === "undefined") return;
           // Optionally store in localStorage
           localStorage.setItem("company_name", companyName);
 

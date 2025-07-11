@@ -155,6 +155,7 @@ export default function ESGAnalysis() {
         setRecommendations(["Supplier data not available"]);
         return;
       }
+      if (typeof window === "undefined") return;
       localStorage.setItem("remainingScores", JSON.stringify([
         "Cost Efficiency: 88\nRisk Score: 12\nReliability Score: 95"
       ]));
@@ -246,6 +247,7 @@ export default function ESGAnalysis() {
   useEffect(() => {
     const fetchProfileAndSetCompany = async () => {
       try {
+        if (typeof window === "undefined") return;
         const token = localStorage.getItem("token");
         if (!token) {
           throw new Error("No authentication token found");
@@ -270,6 +272,7 @@ export default function ESGAnalysis() {
         if (companyName) {
           // Set selectedSupplier
           setSelectedSupplier(companyName);
+          if (typeof window === "undefined") return;
           // Optionally store in localStorage
           localStorage.setItem("company_name", companyName);
 

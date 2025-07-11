@@ -23,8 +23,7 @@ const sections = [
   { id: "documents", title: "Documents", icon: FileText, description: "Supporting documentation" }
 ]
 
-const userData = JSON.parse(localStorage.getItem("userData") || "{}");
-const email = userData.email;
+
 
 // Function to disable input feilds 
 const shouldDisableField = (fieldValue: string) => {
@@ -96,6 +95,28 @@ export default function ESG( ){
     [sectionId]: !prev[sectionId]
   }))
   }
+
+  type UserData = {
+    email: string;
+    role: string;
+  };
+  
+  const [userData, setUserData] = useState<UserData | null>(null);
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedData = localStorage.getItem("userData");
+      if (storedData) {
+        try {
+          const parsedData = JSON.parse(storedData);
+          setUserData(parsedData);
+        } catch (err) {
+          console.error("Failed to parse userData from localStorage", err);
+          setUserData(null);
+        }
+      }
+    }
+  }, []);
+  const email = userData?.email ?? "";
 
     // function to update value 
   const updateFormFields = (parsed: any) => {
@@ -194,6 +215,8 @@ export default function ESG( ){
 
     const formData = new FormData();
     formData.append("file", file);
+
+     if (typeof window === "undefined") return;
 
     // Get email from localStorage (or any other auth provider)
     const userData = JSON.parse(localStorage.getItem("userData") || "{}");

@@ -40,8 +40,28 @@ export default function Reliability() {
     documents: false
   });
 
-  const userData = JSON.parse(localStorage.getItem("userData") || "{}");
-  const email = userData.email;
+  
+type UserData = {
+  email: string;
+  role: string;
+};
+
+const [userData, setUserData] = useState<UserData | null>(null);
+useEffect(() => {
+  if (typeof window !== "undefined") {
+    const storedData = localStorage.getItem("userData");
+    if (storedData) {
+      try {
+        const parsedData = JSON.parse(storedData);
+        setUserData(parsedData);
+      } catch (err) {
+        console.error("Failed to parse userData from localStorage", err);
+        setUserData(null);
+      }
+    }
+  }
+}, []);
+const email = userData?.email ?? "";
 
   const toggleSection = (sectionId: SectionId) => {
     setExpandedSections(prev => ({
@@ -117,7 +137,7 @@ const handleFinalRelSubmit = async (selectedFile: File, email: string) => {
 
     const formData = new FormData();
     formData.append("file", file);
-
+    if (typeof window === "undefined") return;
     // Get email from localStorage (or any other auth provider)
     const userData = JSON.parse(localStorage.getItem("userData") || "{}");
     const email = userData.email || "";
