@@ -12,6 +12,7 @@ import {
   CheckCircle,
 } from "lucide-react";
 import { products } from "../../data/products";
+import { Chatbot } from "@/components/chatbot"
 
 export default function ProductDetails() {
   const params = useParams();
@@ -220,6 +221,7 @@ export default function ProductDetails() {
           )}
         </div>
       </div>
+      <Chatbot />
     </div>
   );
 }

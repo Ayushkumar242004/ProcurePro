@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Search, Grid, ChevronDown } from "lucide-react";
 import { ProductCard } from "./ProductCard";
 import { products } from "../data/products";
+import { Chatbot } from "@/components/chatbot"
 
 export default function Home() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -123,6 +124,7 @@ export default function Home() {
           </div>
         )}
       </div>
+      <Chatbot />
     </div>
   );
 }

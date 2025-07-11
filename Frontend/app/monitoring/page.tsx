@@ -654,6 +654,7 @@ import {
   Loader2,
   Building,
 } from "lucide-react"
+import { Chatbot } from "@/components/chatbot"
 
 // Product categories for filtering
 const productCategories = [
@@ -1138,6 +1139,7 @@ export default function MonitoringPage() {
           </div>
         </div>
       </div>
+       <Chatbot />
     </div>
   )
 }

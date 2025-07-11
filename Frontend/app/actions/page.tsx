@@ -13,6 +13,7 @@ import {
 import { SupplierCard } from "./SupplierCard";
 import { v4 as uuidv4 } from "uuid";
 import { getGeminiRecommendation } from "../utils/gemini";
+import { Chatbot } from "@/components/chatbot"
 
 interface GeminiResponse {
   violations: {
@@ -629,6 +630,7 @@ export default function HomePage() {
           </div>
         )}
       </div>
+      <Chatbot />
     </div>
   );
 }

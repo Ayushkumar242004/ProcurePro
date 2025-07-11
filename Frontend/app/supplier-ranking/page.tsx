@@ -8,6 +8,7 @@ import { Progress } from "@/components/ui/progress"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import { ChevronDown, ChevronRight, AlertTriangle, Lightbulb, Star, TrendingUp, MapPin } from "lucide-react"
+import { Chatbot } from "@/components/chatbot"
 
 const suppliers = [
   {
@@ -245,6 +246,7 @@ export default function SupplierRanking() {
           ))}
         </div>
       </div>
+      <Chatbot />
     </div>
   )
 }
