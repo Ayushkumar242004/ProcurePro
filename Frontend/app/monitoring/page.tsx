@@ -162,7 +162,7 @@
 //     setSendingReminder(documentType)
     
 //     try {
-//       const response = await fetch('http://localhost:8000/api/send-document-reminder', {
+//       const response = await fetch('https://procurepro-1.onrender.com/api/send-document-reminder', {
 //         method: 'POST',
 //         headers: {
 //           'Content-Type': 'application/json',
@@ -369,7 +369,7 @@
 //     const fetchSuppliers = async () => {
 //       try {
 //         setLoading(true)
-//         const response = await fetch('http://localhost:8000/api/suppliers-status')
+//         const response = await fetch('https://procurepro-1.onrender.com/api/suppliers-status')
 //         if (!response.ok) {
 //           throw new Error('Failed to fetch suppliers')
 //         }
@@ -739,7 +739,7 @@ const CompanyDocumentSection = ({ supplier, isExpanded, onToggle }: CompanyDocum
     setSendingReminder(documentType)
     
     try {
-      const response = await fetch('http://localhost:8000/api/send-document-reminder', {
+      const response = await fetch('https://procurepro-1.onrender.com/api/send-document-reminder', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -945,7 +945,7 @@ export default function MonitoringPage() {
     const fetchSuppliers = async () => {
       try {
         setLoading(true)
-        const response = await fetch('http://localhost:8000/api/suppliers-status')
+        const response = await fetch('https://procurepro-1.onrender.com/api/suppliers-status')
         if (!response.ok) {
           throw new Error('Failed to fetch suppliers')
         }

@@ -124,7 +124,7 @@ export default function CostEfficiency() {
   useEffect(() => {
     const checkData = async () => {
       try {
-        const dbResponse = await fetch('http://localhost:8000/get-cost-prefill', 
+        const dbResponse = await fetch('https://procurepro-1.onrender.com/get-cost-prefill', 
         {
           headers: { "email": email }
         });
@@ -147,7 +147,7 @@ export default function CostEfficiency() {
 
   const handleFinalCostSubmit = async () => {
     try {
-        const response = await fetch("http://localhost:8000/calculate-ci-score", {
+        const response = await fetch("https://procurepro-1.onrender.com/calculate-ci-score", {
         method: "POST",
         headers: {
         "Content-Type": "application/json",
@@ -188,7 +188,7 @@ export default function CostEfficiency() {
     console.log("Uploading file:", file.name);
 
     setUploadProgress(30);
-    const response = await fetch("http://localhost:8000/submit-ci-report", {
+    const response = await fetch("https://procurepro-1.onrender.com/submit-ci-report", {
       method: "POST",
       body: formData,
     });

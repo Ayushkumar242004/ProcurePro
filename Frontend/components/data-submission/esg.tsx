@@ -160,7 +160,7 @@ export default function ESG( ){
     useEffect( ( ) => { 
       const checkData = async ( ) => {
         try{
-          const dbResponse = await fetch('http://localhost:8000/api/get-esg-prefill' , 
+          const dbResponse = await fetch('https://procurepro-1.onrender.com/api/get-esg-prefill' , 
           {
             headers: { "email": email }
           }) ; 
@@ -183,7 +183,7 @@ export default function ESG( ){
 
     const handleFinalESGSubmit = async () => {
     try {
-        const response = await fetch("http://localhost:8000/api/calculate-and-store-esg", {
+        const response = await fetch("https://procurepro-1.onrender.com/api/calculate-and-store-esg", {
         method: "POST",
         headers: {
         "Content-Type": "application/json",
@@ -226,7 +226,7 @@ export default function ESG( ){
     console.log("Uploading file:", file.name);
 
     setUploadProgress(30);
-    const response = await fetch("http://localhost:8000/api/submit-esg-report", {
+    const response = await fetch("https://procurepro-1.onrender.com/api/submit-esg-report", {
       method: "POST",
       body: formData,
     });

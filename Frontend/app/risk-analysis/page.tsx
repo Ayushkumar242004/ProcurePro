@@ -114,7 +114,7 @@ export default function RiskAnalysis() {
     const [suppliersC, setSuppliersC] = useState<Supplier[]>([]);
     useEffect(() => {
         const fetchSuppliers = async () => {
-            const res = await fetch("http://localhost:8000/api/suppliers");
+            const res = await fetch("https://procurepro-1.onrender.com/api/suppliers");
             const data = await res.json();
             console.log("Fetched suppliers:", data.suppliers);
             setSuppliers(data.suppliers);
@@ -133,7 +133,7 @@ export default function RiskAnalysis() {
                     throw new Error("No authentication token found");
                 }
 
-                const response = await fetch("http://localhost:8000/profile/me", {
+                const response = await fetch("https://procurepro-1.onrender.com/profile/me", {
                     headers: {
                         "Authorization": `Bearer ${token}`,
                         "Content-Type": "application/json",
@@ -292,7 +292,7 @@ export default function RiskAnalysis() {
         if (userData.role === "Supplier") return;
 
         const fetchSuppliers = async () => {
-            const res = await fetch("http://localhost:8000/api/suppliers");
+            const res = await fetch("https://procurepro-1.onrender.com/api/suppliers");
             const data = await res.json();
 
             setSuppliersC(data.suppliers);

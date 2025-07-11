@@ -83,7 +83,7 @@ const email = userData?.email ?? "";
   useEffect(() => { 
     const checkData = async () => {
       try {
-        const dbResponse = await fetch('http://localhost:8000/get-reliability-prefill', {
+        const dbResponse = await fetch('https://procurepro-1.onrender.com/get-reliability-prefill', {
           headers: { "email": email }
         }); 
         
@@ -109,7 +109,7 @@ const handleFinalRelSubmit = async (selectedFile: File, email: string) => {
     formData.append("file", selectedFile);  // Ensure this is a File object
     formData.append("email", email);        // Email as plain string
 
-    const response = await fetch("http://localhost:8000/submit-reliability-report", {
+    const response = await fetch("https://procurepro-1.onrender.com/submit-reliability-report", {
       method: "POST",
       body: formData, // No need to manually set Content-Type
     });
@@ -146,7 +146,7 @@ const handleFinalRelSubmit = async (selectedFile: File, email: string) => {
     console.log("Uploading file:", file.name);
 
     setUploadProgress(30);
-    const response = await fetch("http://localhost:8000/submit-reliability-report", {
+    const response = await fetch("https://procurepro-1.onrender.com/submit-reliability-report", {
       method: "POST",
       body: formData,
     });

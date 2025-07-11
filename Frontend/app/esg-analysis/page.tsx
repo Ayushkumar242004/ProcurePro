@@ -164,7 +164,7 @@ export default function ESGAnalysis() {
       const esgScores = supplier?.esg_subfactor_scores ||
         JSON.parse(supplier?.esg_subfactor_scores || "{}");
 
-      const response = await fetch("http://localhost:8000/api/gemini-recommendations-esgScore", {
+      const response = await fetch("https://procurepro-1.onrender.com/api/gemini-recommendations-esgScore", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -234,7 +234,7 @@ export default function ESGAnalysis() {
   const [suppliersC, setSuppliersC] = useState<Supplier[]>([]);
   useEffect(() => {
     const fetchSuppliers = async () => {
-      const res = await fetch("http://localhost:8000/api/suppliers");
+      const res = await fetch("https://procurepro-1.onrender.com/api/suppliers");
       const data = await res.json();
       console.log("Fetched suppliers:", data.suppliers);
       setSuppliers(data.suppliers);
@@ -253,7 +253,7 @@ export default function ESGAnalysis() {
           throw new Error("No authentication token found");
         }
 
-        const response = await fetch("http://localhost:8000/profile/me", {
+        const response = await fetch("https://procurepro-1.onrender.com/profile/me", {
           headers: {
             "Authorization": `Bearer ${token}`,
             "Content-Type": "application/json",
