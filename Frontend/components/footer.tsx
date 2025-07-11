@@ -8,15 +8,15 @@ import { Input } from "@/components/ui/input"
 const navigation = {
   main: [
     { name: "Home", href: "/" },
-    { name: "About", href: "/about" },
-    { name: "Services", href: "/services" },
-    { name: "Contact", href: "/contact" },
+    { name: "About", href: "/" },
+    { name: "Services", href: "/" },
+    { name: "Contact", href: "/" },
   ],
   services: [
-    { name: "ESG Analysis", href: "/services#esg" },
-    { name: "Supplier Ranking", href: "/services#ranking" },
-    { name: "Risk Assessment", href: "/services#risk" },
-    { name: "Compliance Monitoring", href: "/services#compliance" },
+    { name: "ESG Analysis", href: "/esg-analysis" },
+    { name: "Supplier Ranking", href: "/supplier-ranking" },
+    { name: "Risk Assessment", href: "/risk-analysis" },
+    { name: "Actions", href: "/assessment" },
   ],
   legal: [
     { name: "Privacy Policy", href: "/privacy" },
@@ -105,7 +105,7 @@ export function Footer() {
               </div>
               <div className="flex items-center space-x-3 text-sm text-muted-foreground">
                 <MapPin className="h-4 w-4 text-primary" />
-                <span>San Francisco, CA</span>
+                <span>E-City, Bengaluru</span>
               </div>
             </div>
 
