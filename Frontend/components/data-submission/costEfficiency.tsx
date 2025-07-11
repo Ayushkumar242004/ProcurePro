@@ -19,31 +19,12 @@ const sections = [
   { id: "documents", title: "Documents", icon: Upload, description: "Supporting documentation" }
 ]
 
-type UserData = {
-  email: string;
-  role: string;
-};
-
+const userData = JSON.parse(localStorage.getItem("userData") || "{}");
+const email = userData.email;
 
 export default function CostEfficiency() {
 
   
-const [userData, setUserData] = useState<UserData | null>(null);
-useEffect(() => {
-  if (typeof window !== "undefined") {
-    const storedData = localStorage.getItem("userData");
-    if (storedData) {
-      try {
-        const parsedData = JSON.parse(storedData);
-        setUserData(parsedData);
-      } catch (err) {
-        console.error("Failed to parse userData from localStorage", err);
-        setUserData(null);
-      }
-    }
-  }
-}, []);
-const email = userData?.email ?? "";
 
   // Cost Metrics State
   const [unitPriceBenchmarking, setUnitPriceBenchmarking] = useState("");
@@ -120,7 +101,7 @@ const email = userData?.email ?? "";
   useEffect(() => {
     const checkData = async () => {
       try {
-        const dbResponse = await fetch('https://procurepro-1.onrender.com/get-cost-prefill', 
+        const dbResponse = await fetch('http://localhost:8000/get-cost-prefill', 
         {
           headers: { "email": email }
         });
@@ -143,7 +124,7 @@ const email = userData?.email ?? "";
 
   const handleFinalCostSubmit = async () => {
     try {
-        const response = await fetch("https://procurepro-1.onrender.com/calculate-ci-score", {
+        const response = await fetch("http://localhost:8000/calculate-ci-score", {
         method: "POST",
         headers: {
         "Content-Type": "application/json",
@@ -175,7 +156,6 @@ const email = userData?.email ?? "";
 
     const formData = new FormData();
     formData.append("file", file);
-    if (typeof window === "undefined") return;
 
     // Get email from localStorage (or any other auth provider)
     const userData = JSON.parse(localStorage.getItem("userData") || "{}");
@@ -185,7 +165,7 @@ const email = userData?.email ?? "";
     console.log("Uploading file:", file.name);
 
     setUploadProgress(30);
-    const response = await fetch("https://procurepro-1.onrender.com/submit-ci-report", {
+    const response = await fetch("http://localhost:8000/submit-ci-report", {
       method: "POST",
       body: formData,
     });

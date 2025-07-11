@@ -80,7 +80,7 @@ export default function RiskAnalysis() {
     const [selectedSupplier, setSelectedSupplier] = useState("")
     const [selectedSupplierC, setSelectedSupplierC] = useState("")
 
-    const [activeTab, setActiveTab] = useState("riskEfficiency-analysis")
+    const [activeTab, setActiveTab] = useState("risk-analysis")
     const [qualityRiskScore, setQualityRiskScore] = useState("");
     const [logisticsRiskScore, setLogisticsRiskScore] = useState("");
     const [operationalRiskScore, setOperationalRiskScore] = useState("");
@@ -114,7 +114,7 @@ export default function RiskAnalysis() {
     const [suppliersC, setSuppliersC] = useState<Supplier[]>([]);
     useEffect(() => {
         const fetchSuppliers = async () => {
-            const res = await fetch("https://procurepro-1.onrender.com/api/suppliers");
+            const res = await fetch("http://localhost:8000/api/suppliers");
             const data = await res.json();
             console.log("Fetched suppliers:", data.suppliers);
             setSuppliers(data.suppliers);
@@ -127,14 +127,12 @@ export default function RiskAnalysis() {
     useEffect(() => {
         const fetchProfileAndSetCompany = async () => {
             try {
-                if (typeof window === "undefined") return;
-
                 const token = localStorage.getItem("token");
                 if (!token) {
                     throw new Error("No authentication token found");
                 }
 
-                const response = await fetch("https://procurepro-1.onrender.com/profile/me", {
+                const response = await fetch("http://localhost:8000/profile/me", {
                     headers: {
                         "Authorization": `Bearer ${token}`,
                         "Content-Type": "application/json",
@@ -151,8 +149,6 @@ export default function RiskAnalysis() {
                 const companyName = data.data.company_name;
 
                 if (companyName) {
-                    if (typeof window === "undefined") return;
-
                     // Set selectedSupplier
                     setSelectedSupplier(companyName);
                     // Optionally store in localStorage
@@ -288,14 +284,12 @@ export default function RiskAnalysis() {
     //company
 
     useEffect(() => {
-        if (typeof window === "undefined") return;
-
         const userData = JSON.parse(localStorage.getItem("userData") || "{}");
 
         if (userData.role === "Supplier") return;
 
         const fetchSuppliers = async () => {
-            const res = await fetch("https://procurepro-1.onrender.com/api/suppliers");
+            const res = await fetch("http://localhost:8000/api/suppliers");
             const data = await res.json();
 
             setSuppliersC(data.suppliers);
@@ -305,8 +299,6 @@ export default function RiskAnalysis() {
     }, []);
 
     useEffect(() => {
-        if (typeof window === "undefined") return;
-
         const userData = JSON.parse(localStorage.getItem("userData") || "{}");
         if (userData.role === "Supplier") return;
 
@@ -328,31 +320,12 @@ export default function RiskAnalysis() {
 
     const [role, setRole] = useState<string | null>(null);
     useEffect(() => {
-  if (typeof window !== "undefined") {
-    
-    const stored = localStorage.getItem("userData");
-    const parsed = stored ? JSON.parse(stored) : {};
-    setRole(parsed?.role || null);
-  }
-}, []);
-
-
-const [userRole, setUserRole] = useState<string | null>(null);
-
-useEffect(() => {
-  if (typeof window !== "undefined") {
-    const storedData = localStorage.getItem("userData");
-    if (storedData) {
-      try {
-        const parsed = JSON.parse(storedData);
-        setUserRole(parsed?.role || null);
-      } catch (err) {
-        console.error("Error parsing userData:", err);
-        setUserRole(null);
-      }
-    }
-  }
-}, []);
+        if (typeof window !== "undefined") {
+            const stored = localStorage.getItem("userData");
+            const parsed = stored ? JSON.parse(stored) : {};
+            setRole(parsed?.role || null);
+        }
+    }, []);
 
 
 
@@ -374,7 +347,7 @@ useEffect(() => {
                     </p>
                 </motion.div>
 
-                {userRole !== "Supplier" && (
+                {JSON.parse(localStorage.getItem("userData") || "{}")?.role !== "Supplier" && (
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -410,23 +383,24 @@ useEffect(() => {
                     className="w-full mb-10"
                 >
                     <TabsList className="w-full overflow-x-auto whitespace-nowrap flex gap-2 sm:justify-center">
-                        <TabsTrigger value="ESG" className="px-4 py-2 text-sm sm:text-base">
-                            ESG
+                        <TabsTrigger value="Cost Efficiency" className="px-4 py-2 text-sm sm:text-base">
+                            Cost Efficiency
                         </TabsTrigger>
                         <TabsTrigger value="Risk" className="px-4 py-2 text-sm sm:text-base">
                             Risk
                         </TabsTrigger>
-                        <TabsTrigger value="Cost Efficiency" className="px-4 py-2 text-sm sm:text-base">
-                            Cost Efficiency
-                        </TabsTrigger>
+
                         <TabsTrigger value="Reliability" className="px-4 py-2 text-sm sm:text-base">
                             Reliability
+                        </TabsTrigger>
+                        <TabsTrigger value="ESG" className="px-4 py-2 text-sm sm:text-base">
+                            ESG
                         </TabsTrigger>
                     </TabsList>
                 </Tabs>
 
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="">
-                    <TabsContent value="riskEfficiency-analysis" className="space-y-6">
+                    <TabsContent value="risk-analysis" className="space-y-6">
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}

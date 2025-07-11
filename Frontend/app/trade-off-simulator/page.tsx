@@ -855,7 +855,7 @@
 //     const fetchSuppliers = async () => {
 //       try {
 //         setLoading(true)
-//         const response = await fetch('https://procurepro-1.onrender.com/api/suppliers-with-products')
+//         const response = await fetch('http://localhost:8000/api/suppliers-with-products')
 //         if (!response.ok) {
 //           throw new Error('Failed to fetch suppliers')
 //         }
@@ -1174,7 +1174,7 @@ export default function TradeOffSimulator() {
 
   useEffect(() => {
     const fetchSuppliers = async () => {
-      const res = await fetch("https://procurepro-1.onrender.com/api/suppliers");
+      const res = await fetch("http://localhost:8000/api/suppliers");
       const data = await res.json();
       console.log("Fetched suppliers:", data.suppliers);
       setSuppliers(data.suppliers);

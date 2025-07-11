@@ -94,8 +94,7 @@ function getTrendIcon(trend: string) {
 
 export default function ESGAnalysis() {
   const [selectedSupplier, setSelectedSupplier] = useState("")
-  const [selectedSupplierC, setSelectedSupplierC] = useState("")
-  const [activeTab, setActiveTab] = useState("esg-analysis")
+ const [activeTab, setActiveTab] = useState("esg-analysis")
 
 
   // 🌱 Environmental
@@ -164,7 +163,7 @@ export default function ESGAnalysis() {
       const esgScores = supplier?.esg_subfactor_scores ||
         JSON.parse(supplier?.esg_subfactor_scores || "{}");
 
-      const response = await fetch("https://procurepro-1.onrender.com/api/gemini-recommendations-esgScore", {
+      const response = await fetch("http://localhost:8000/api/gemini-recommendations-esgScore", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -234,7 +233,7 @@ export default function ESGAnalysis() {
   const [suppliersC, setSuppliersC] = useState<Supplier[]>([]);
   useEffect(() => {
     const fetchSuppliers = async () => {
-      const res = await fetch("https://procurepro-1.onrender.com/api/suppliers");
+      const res = await fetch("http://localhost:8000/api/suppliers");
       const data = await res.json();
       console.log("Fetched suppliers:", data.suppliers);
       setSuppliers(data.suppliers);
@@ -247,13 +246,12 @@ export default function ESGAnalysis() {
   useEffect(() => {
     const fetchProfileAndSetCompany = async () => {
       try {
-          if (typeof window === "undefined") return;
         const token = localStorage.getItem("token");
         if (!token) {
           throw new Error("No authentication token found");
         }
 
-        const response = await fetch("https://procurepro-1.onrender.com/profile/me", {
+        const response = await fetch("http://localhost:8000/profile/me", {
           headers: {
             "Authorization": `Bearer ${token}`,
             "Content-Type": "application/json",
@@ -270,7 +268,6 @@ export default function ESGAnalysis() {
         const companyName = data.data.company_name;
 
         if (companyName) {
-          if (typeof window === "undefined") return;
           // Set selectedSupplier
           setSelectedSupplier(companyName);
           // Optionally store in localStorage
@@ -387,7 +384,7 @@ export default function ESGAnalysis() {
       return;
     }
 
-    const supplier = suppliers.find(s => s.company_name === selectedSupplierC);
+    const supplier = suppliers.find(s => s.company_name === selectedSupplier);
 
     if (!supplier) {
       resetAllScores();
@@ -481,99 +478,6 @@ export default function ESGAnalysis() {
     }
   };
 
-  //company
-
-  useEffect(() => {
-      if (typeof window === "undefined") return;
-    const userData = JSON.parse(localStorage.getItem("userData") || "{}");
-
-    if (userData.role === "Supplier") return;
-
-    const fetchSuppliers = async () => {
-      const res = await fetch("https://procurepro-1.onrender.com/api/suppliers");
-      const data = await res.json();
-
-      setSuppliersC(data.suppliers);
-    };
-
-    fetchSuppliers();
-  }, []);
-
-  useEffect(() => {
-      if (typeof window === "undefined") return;
-    const userData = JSON.parse(localStorage.getItem("userData") || "{}");
-    if (userData.role === "Supplier") return;
-
-    const supplier = suppliersC.find(s => s.company_name === selectedSupplierC);
-    if (!supplier) return;
-    // Set main ESG scores
-   
-    // Parse subfactor scores if they exist
-    try {
-      const data = supplier.esg_subfactor_scores
-        ? typeof supplier.esg_subfactor_scores === 'string'
-          ? JSON.parse(supplier.esg_subfactor_scores)
-          : supplier.esg_subfactor_scores
-        : null;
-
-      if (data) {
-        if (data.Environmental) {
-          setGhgScore(data.Environmental["GHG Score"] ?? "");
-          setEnergyEfficiencyScore(data.Environmental["Energy Score"] ?? ""); // Fixed
-          setWaterEfficiencyScore(data.Environmental["Water Score"] ?? ""); // Fixed
-          setWasteRecyclingScore(data.Environmental["Waste Score"] ?? ""); // Fixed
-          setComplianceScore(data.Environmental["Compliance Score"] ?? "");
-          setRenewableEnergyScore(data.Environmental["Renewable Score"] ?? ""); // Fixed
-          setBiodiversityScore(data.Environmental["Biodiversity Score"] ?? "");
-          setClimateRiskManagementScore(data.Environmental["Climate Risk Score"] ?? ""); // Fixed
-        }
-
-        // 👥 Social
-        if (data.Social) {
-          setRetentionScore(data.Social["Retention Score"] ?? "");
-          setSafetyScore(data.Social["Safety Score"] ?? "");
-          setDiversityScore(data.Social["Diversity Score"] ?? "");
-          setCommunityInvestmentScore(data.Social["Community Score"] ?? ""); // Fixed
-          setCustomerSatisfactionScore(data.Social["Customer Score"] ?? ""); // Fixed
-          setHumanRightsScore(data.Social["Human Rights Score"] ?? "");
-          setTrainingScore(data.Social["Training Score"] ?? "");
-        }
-
-        // 🏛 Governance
-        if (data.Governance) {
-          setBoardIndependenceScore(data.Governance["Board Independence"] ?? ""); // Fixed
-          setCompensationAlignmentScore(data.Governance["Compensation Score"] ?? ""); // Fixed
-          setAuditCommitteeScore(data.Governance["Audit Score"] ?? ""); // Fixed
-          setShareholderRightsScore(data.Governance["Shareholder Score"] ?? ""); // Fixed
-          setTransparencyScore(data.Governance["Transparency Score"] ?? "");
-          setAntiCorruptionScore(data.Governance["Anti-Corruption"] ?? ""); // Fixed
-          setTaxTransparencyScore(data.Governance["Tax Transparency"] ?? "");
-        }
-      }
-    } catch (err) {
-      console.error("Error parsing subfactor scores:", err);
-    }
-
-  }, [selectedSupplierC, suppliersC]);
-
-  
-  const [userRole, setUserRole] = useState<string | null>(null);
-  
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const storedData = localStorage.getItem("userData");
-      if (storedData) {
-        try {
-          const parsed = JSON.parse(storedData);
-          setUserRole(parsed?.role || null);
-        } catch (err) {
-          console.error("Error parsing userData:", err);
-          setUserRole(null);
-        }
-      }
-    }
-  }, []);
-  
 
   return (
     <div className="relative pt-20 min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
@@ -594,56 +498,26 @@ export default function ESGAnalysis() {
         </motion.div>
 
 
-        {userRole !== "Supplier" && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="flex justify-center"
-          >
-            {activeTab === "esg-analysis" && (
-              <Select value={selectedSupplierC} onValueChange={setSelectedSupplierC}>
-                <SelectTrigger className="w-64 transition-all duration-300 hover:shadow-lg">
-                  <SelectValue placeholder="Select a supplier">
-                    {selectedSupplierC || "Select a supplier"}
-                  </SelectValue>
-                </SelectTrigger>
-                <SelectContent>
-                  {suppliersC.map((supplier) => (
-                    <SelectItem
-                      key={`${supplier.company_name}_${Math.random()}`}
-                      value={String(supplier.company_name)}
-                      disabled={supplier.esg_upload_status !== "success"}
-                    >
-                      {supplier.company_name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            )}
-          </motion.div>
-        )}
-
-
         <Tabs
           value={activeTab}
           onValueChange={handleTabChange}
           className="w-full mb-10"
         >
-          <TabsList className="w-full overflow-x-auto whitespace-nowrap flex gap-2 sm:justify-center">
-            <TabsTrigger value="ESG" className="px-4 py-2 text-sm sm:text-base">
-              ESG
-            </TabsTrigger>
-            <TabsTrigger value="Risk" className="px-4 py-2 text-sm sm:text-base">
-              Risk
-            </TabsTrigger>
-            <TabsTrigger value="Cost Efficiency" className="px-4 py-2 text-sm sm:text-base">
-              Cost Efficiency
-            </TabsTrigger>
-            <TabsTrigger value="Reliability" className="px-4 py-2 text-sm sm:text-base">
-              Reliability
-            </TabsTrigger>
-          </TabsList>
+            <TabsList className="w-full overflow-x-auto whitespace-nowrap flex gap-2 sm:justify-center">
+                                  <TabsTrigger value="Cost Efficiency" className="px-4 py-2 text-sm sm:text-base">
+                                      Cost Efficiency
+                                  </TabsTrigger>
+                                  <TabsTrigger value="Risk" className="px-4 py-2 text-sm sm:text-base">
+                                      Risk
+                                  </TabsTrigger>
+          
+                                  <TabsTrigger value="Reliability" className="px-4 py-2 text-sm sm:text-base">
+                                      Reliability
+                                  </TabsTrigger>
+                                  <TabsTrigger value="ESG" className="px-4 py-2 text-sm sm:text-base">
+                                      ESG
+                                  </TabsTrigger>
+                              </TabsList>
         </Tabs>
         <Tabs value={activeTab} onValueChange={setActiveTab} className="">
 

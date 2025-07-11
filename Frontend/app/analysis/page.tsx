@@ -37,12 +37,10 @@ const tabConfig = [
     gradient: "from-[#10b981] via-[#2563eb] to-[#a21caf]"
   }
 ];
-type UserData = {
-  email: string;
-  role: string;
-};
 
-
+const userData = JSON.parse(localStorage.getItem("userData") || "{}");
+const email = userData.email ; 
+const role = userData.role ; 
 
 export default function analysis( ){
     const [activeTab, setActiveTab] = useState("ESG") ; 
@@ -52,26 +50,6 @@ export default function analysis( ){
     const [userRole, setUserRole] = useState("");
     const [userEmail, setUserEmail] = useState("");
 
-    
-const [userData, setUserData] = useState<UserData | null>(null);
-
-
-useEffect(() => {
-  if (typeof window !== "undefined") {
-    const storedData = localStorage.getItem("userData");
-    if (storedData) {
-      try {
-        const parsedData = JSON.parse(storedData);
-        setUserData(parsedData);
-      } catch (err) {
-        console.error("Failed to parse userData from localStorage", err);
-        setUserData(null);
-      }
-    }
-  }
-}, []);
-const email = userData?.email ?? "";
-const role = userData?.role ?? "";
 
     // Initialize user data
     useEffect(() => {
@@ -94,7 +72,7 @@ const role = userData?.role ?? "";
                     }
 
                     const response = await fetch(
-                        `https://procurepro-1.onrender.com/company_name?email_domain=${encodeURIComponent(domain)}`
+                        `http://localhost:8000/company_name?email_domain=${encodeURIComponent(domain)}`
                     );
                     
                     if (!response.ok) {
@@ -106,7 +84,7 @@ const role = userData?.role ?? "";
                     setSupplier(data.company_name);
                 } else {
                     // For non-suppliers: get all suppliers
-                    const response = await fetch("https://procurepro-1.onrender.com/api/suppliers");
+                    const response = await fetch("http://localhost:8000/api/suppliers");
                     if (!response.ok) {
                         throw new Error("Failed to fetch suppliers");
                     }
@@ -127,7 +105,7 @@ const role = userData?.role ?? "";
     // fetching all suppliers
     useEffect(() => {
         const fetchSuppliers = async () => {
-            const res = await fetch("https://procurepro-1.onrender.com/api/suppliers");
+            const res = await fetch("http://localhost:8000/api/suppliers");
             const data = await res.json();
             console.log("Fetched suppliers:", data.suppliers);
             setSuppliers(data.suppliers);

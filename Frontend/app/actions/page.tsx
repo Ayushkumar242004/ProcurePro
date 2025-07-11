@@ -13,7 +13,6 @@ import {
 import { SupplierCard } from "./SupplierCard";
 import { v4 as uuidv4 } from "uuid";
 import { getGeminiRecommendation } from "../utils/gemini";
-import { Chatbot } from "@/components/chatbot"
 
 interface GeminiResponse {
   violations: {
@@ -508,13 +507,11 @@ export default function HomePage() {
                     try {
                       const id = uuidv4();
                       const now = new Date().toISOString();
-                      console.log("hi");
                       const newSupplier = dbSuppliers.find(
                         (supplier) =>
                           supplier.company_name == newAction.supplierName
                       );
                       newSupplier.id = id;
-                      console.log("hi2");
                       // Get the response from Gemini
                       const { violations: newViolations, recommendations } =
                         await getGeminiRecommendation(
@@ -522,7 +519,7 @@ export default function HomePage() {
                           newAction.riskCategory,
                           newAction.articleSummary
                         );
-                        console.log("hi3");
+
                       if (!recommendations || recommendations.length === 0) {
                         alert("No recommendations generated. Try again.");
                         return;
@@ -630,7 +627,6 @@ export default function HomePage() {
           </div>
         )}
       </div>
-      <Chatbot />
     </div>
   );
 }

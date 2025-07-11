@@ -25,11 +25,8 @@ const sections = [
   { id: "documents", title: "Documents", icon: Upload, description: "Supporting documentation" }
 ]
 
-type UserData = {
-  email: string;
-  role: string;
-};
-
+const userData = JSON.parse(localStorage.getItem("userData") || "{}");
+const email = userData.email;
 
 export default function Risk() {
   // Operational Risk State
@@ -42,24 +39,6 @@ export default function Risk() {
   const [strikeIntensityNorm, setStrikeIntensityNorm] = useState("");
   const [operationalRiskScore, setOperationalRiskScore] = useState("");
   const [operationalRisk, setOperationalRisk] = useState("");
-
-  
-const [userData, setUserData] = useState<UserData | null>(null);
-useEffect(() => {
-  if (typeof window !== "undefined") {
-    const storedData = localStorage.getItem("userData");
-    if (storedData) {
-      try {
-        const parsedData = JSON.parse(storedData);
-        setUserData(parsedData);
-      } catch (err) {
-        console.error("Failed to parse userData from localStorage", err);
-        setUserData(null);
-      }
-    }
-  }
-}, []);
-const email = userData?.email ?? "";
 
   // Compliance & Legal Risk State
   const [legalDisputes, setLegalDisputes] = useState("");
@@ -225,7 +204,7 @@ const email = userData?.email ?? "";
     const checkData = async () => {
       try {
         console.log("Checking for prefill data for email:", email);
-        const dbResponse = await fetch("https://procurepro-1.onrender.com/get-risk-prefill", {
+        const dbResponse = await fetch("http://localhost:8000/get-risk-prefill", {
           headers: { email },
         });
 
@@ -261,7 +240,6 @@ const email = userData?.email ?? "";
   console.log("File to upload:", file);
 
   try {
-    if (typeof window === "undefined") return;
     // Step 1: Upload file to /submit-risk-report
     const formData = new FormData();
     formData.append("file", file);
@@ -270,7 +248,7 @@ const email = userData?.email ?? "";
     formData.append("email", email); // Ensure this is the supplier's email address
     console.log("Form data prepared:", formData);
 
-    const riskReportResponse = await fetch("https://procurepro-1.onrender.com/submit-risk-report", {
+    const riskReportResponse = await fetch("http://localhost:8000/submit-risk-report", {
       method: "POST",
       body: formData,
     });
@@ -308,7 +286,7 @@ const email = userData?.email ?? "";
     };
 
     // Step 2: Send formatted result to /predict
-    const predictResponse = await fetch("https://procurepro-1.onrender.com/api/model/predict", {
+    const predictResponse = await fetch("http://localhost:8000/api/model/predict", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

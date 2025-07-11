@@ -10,8 +10,6 @@ export default function LogoutPage() {
   const router = useRouter()
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
-
     // Clear user data from localStorage
     localStorage.removeItem("userData")
 
