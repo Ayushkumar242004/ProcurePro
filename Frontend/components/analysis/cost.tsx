@@ -81,7 +81,7 @@ export default function Cost({ supplier }: { supplier: string }) {
           
           try {
               const encodedName = encodeURIComponent(supplier);
-              const response = await fetch(`http://localhost:8000/suppliers/cost/${encodedName}`);
+              const response = await fetch(`https://procurepro-1.onrender.com/suppliers/cost/${encodedName}`);
               
               if (!response.ok) {
                   throw new Error(`HTTP error! status: ${response.status}`);

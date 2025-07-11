@@ -114,7 +114,7 @@ export default function RiskAnalysis() {
     const [suppliersC, setSuppliersC] = useState<Supplier[]>([]);
     useEffect(() => {
         const fetchSuppliers = async () => {
-            const res = await fetch("http://localhost:8000/api/suppliers");
+            const res = await fetch("https://procurepro-1.onrender.com/api/suppliers");
             const data = await res.json();
             console.log("Fetched suppliers:", data.suppliers);
             setSuppliers(data.suppliers);
@@ -127,12 +127,14 @@ export default function RiskAnalysis() {
     useEffect(() => {
         const fetchProfileAndSetCompany = async () => {
             try {
+                if (typeof window === "undefined") return;
+
                 const token = localStorage.getItem("token");
                 if (!token) {
                     throw new Error("No authentication token found");
                 }
 
-                const response = await fetch("http://localhost:8000/profile/me", {
+                const response = await fetch("https://procurepro-1.onrender.com/profile/me", {
                     headers: {
                         "Authorization": `Bearer ${token}`,
                         "Content-Type": "application/json",
@@ -149,6 +151,8 @@ export default function RiskAnalysis() {
                 const companyName = data.data.company_name;
 
                 if (companyName) {
+                    if (typeof window === "undefined") return;
+
                     // Set selectedSupplier
                     setSelectedSupplier(companyName);
                     // Optionally store in localStorage
@@ -284,12 +288,14 @@ export default function RiskAnalysis() {
     //company
 
     useEffect(() => {
+        if (typeof window === "undefined") return;
+
         const userData = JSON.parse(localStorage.getItem("userData") || "{}");
 
         if (userData.role === "Supplier") return;
 
         const fetchSuppliers = async () => {
-            const res = await fetch("http://localhost:8000/api/suppliers");
+            const res = await fetch("https://procurepro-1.onrender.com/api/suppliers");
             const data = await res.json();
 
             setSuppliersC(data.suppliers);
@@ -299,6 +305,8 @@ export default function RiskAnalysis() {
     }, []);
 
     useEffect(() => {
+        if (typeof window === "undefined") return;
+
         const userData = JSON.parse(localStorage.getItem("userData") || "{}");
         if (userData.role === "Supplier") return;
 
@@ -321,9 +329,28 @@ export default function RiskAnalysis() {
     const [role, setRole] = useState<string | null>(null);
     useEffect(() => {
   if (typeof window !== "undefined") {
+    
     const stored = localStorage.getItem("userData");
     const parsed = stored ? JSON.parse(stored) : {};
     setRole(parsed?.role || null);
+  }
+}, []);
+
+
+const [userRole, setUserRole] = useState<string | null>(null);
+
+useEffect(() => {
+  if (typeof window !== "undefined") {
+    const storedData = localStorage.getItem("userData");
+    if (storedData) {
+      try {
+        const parsed = JSON.parse(storedData);
+        setUserRole(parsed?.role || null);
+      } catch (err) {
+        console.error("Error parsing userData:", err);
+        setUserRole(null);
+      }
+    }
   }
 }, []);
 
@@ -347,7 +374,7 @@ export default function RiskAnalysis() {
                     </p>
                 </motion.div>
 
-                {JSON.parse(localStorage.getItem("userData") || "{}")?.role !== "Supplier" && (
+                {userRole !== "Supplier" && (
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}

@@ -36,7 +36,7 @@ export default function SupplierNotifications({ userEmail }: SupplierNotificatio
     try {
       const token = localStorage.getItem("token")
       
-      const response = await fetch('http://localhost:8000/api/supplier-notifications', {
+      const response = await fetch('https://procurepro-1.onrender.com/api/supplier-notifications', {
         headers: {
           'Authorization': `Bearer ${token}`,
           'email': userEmail
@@ -63,7 +63,7 @@ export default function SupplierNotifications({ userEmail }: SupplierNotificatio
     try {
       const token = localStorage.getItem("token")
       
-      const response = await fetch('http://localhost:8000/api/mark-notification-read', {
+      const response = await fetch('https://procurepro-1.onrender.com/api/mark-notification-read', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

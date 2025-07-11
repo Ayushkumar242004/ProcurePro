@@ -40,8 +40,28 @@ export default function Reliability() {
     documents: false
   });
 
-  const userData = JSON.parse(localStorage.getItem("userData") || "{}");
-  const email = userData.email;
+type UserData = {
+  email: string;
+  role: string;
+};
+
+const [userData, setUserData] = useState<UserData | null>(null);
+useEffect(() => {
+  if (typeof window !== "undefined") {
+    const storedData = localStorage.getItem("userData");
+    if (storedData) {
+      try {
+        const parsedData = JSON.parse(storedData);
+        setUserData(parsedData);
+      } catch (err) {
+        console.error("Failed to parse userData from localStorage", err);
+        setUserData(null);
+      }
+    }
+  }
+}, []);
+const email = userData?.email ?? "";
+
 
   const toggleSection = (sectionId: SectionId) => {
     setExpandedSections(prev => ({
@@ -63,7 +83,7 @@ export default function Reliability() {
   useEffect(() => { 
     const checkData = async () => {
       try {
-        const dbResponse = await fetch('http://localhost:8000/get-reliability-prefill', {
+        const dbResponse = await fetch('https://procurepro-1.onrender.com/get-reliability-prefill', {
           headers: { "email": email }
         }); 
         
@@ -89,7 +109,7 @@ const handleFinalRelSubmit = async (selectedFile: File, email: string) => {
     formData.append("file", selectedFile);  // Ensure this is a File object
     formData.append("email", email);        // Email as plain string
 
-    const response = await fetch("http://localhost:8000/submit-reliability-report", {
+    const response = await fetch("https://procurepro-1.onrender.com/submit-reliability-report", {
       method: "POST",
       body: formData, // No need to manually set Content-Type
     });
@@ -117,6 +137,7 @@ const handleFinalRelSubmit = async (selectedFile: File, email: string) => {
 
     const formData = new FormData();
     formData.append("file", file);
+    if (typeof window === "undefined") return;
 
     // Get email from localStorage (or any other auth provider)
     const userData = JSON.parse(localStorage.getItem("userData") || "{}");
@@ -126,7 +147,7 @@ const handleFinalRelSubmit = async (selectedFile: File, email: string) => {
     console.log("Uploading file:", file.name);
 
     setUploadProgress(30);
-    const response = await fetch("http://localhost:8000/submit-reliability-report", {
+    const response = await fetch("https://procurepro-1.onrender.com/submit-reliability-report", {
       method: "POST",
       body: formData,
     });

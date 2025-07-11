@@ -38,6 +38,14 @@ from app.routes import risk_model
 from app.services.gemini_service import gemini_service
 
 import math
+
+import os
+import uvicorn
+
+if __name__ == "__main__":
+    
+    uvicorn.run("app.main:app", host="0.0.0.0", port=int(os.environ.get("PORT", 8000)))
+
 # suppliers api was giving mongoDB documents and before sending them to server we need to sanitize them otherwise it gives error
 def sanitize(obj):
     if isinstance(obj, dict):
@@ -88,8 +96,8 @@ app.include_router(risk.router)
 app.include_router(analysis.router)
 app.include_router(risk_model.router, prefix="/api")
 
-
 app.include_router(risk_model.router, prefix="/api/model")
+
 
 # ------------------- Custom Exception Handler -------------------
 @app.exception_handler(RequestValidationError)

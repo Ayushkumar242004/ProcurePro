@@ -54,6 +54,7 @@ export default function CompanyRegister() {
 
       const data = await res.json()
       if (!res.ok) throw new Error(data.detail || "Something went wrong")
+        if (typeof window === "undefined") return;
       localStorage.setItem("company_name", form.company_name);
       toast.success("Company registered successfully!")
       setForm({

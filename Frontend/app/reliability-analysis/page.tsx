@@ -123,7 +123,7 @@ export default function ReliabilityAnalysis() {
     const [suppliersC, setSuppliersC] = useState<Supplier[]>([]);
     useEffect(() => {
         const fetchSuppliers = async () => {
-            const res = await fetch("http://localhost:8000/api/suppliers");
+            const res = await fetch("https://procurepro-1.onrender.com/api/suppliers");
             const data = await res.json();
             console.log("Fetched suppliers:", data.suppliers);
             setSuppliers(data.suppliers);
@@ -134,7 +134,7 @@ export default function ReliabilityAnalysis() {
 
     useEffect(() => {
         const fetchSuppliers = async () => {
-            const res = await fetch("http://localhost:8000/api/suppliers");
+            const res = await fetch("https://procurepro-1.onrender.com/api/suppliers");
             const data = await res.json();
             console.log("Fetched suppliers:", data.suppliers);
             setSuppliersC(data.suppliers);
@@ -144,64 +144,67 @@ export default function ReliabilityAnalysis() {
     }, []);
 
     useEffect(() => {
-        const fetchProfileAndSetCompany = async () => {
-            try {
-                const token = localStorage.getItem("token");
-                if (!token) {
-                    throw new Error("No authentication token found");
-                }
+  const fetchProfileAndSetCompany = async () => {
+    try {
+      if (typeof window === "undefined") return;
 
-                const response = await fetch("http://localhost:8000/profile/me", {
-                    headers: {
-                        "Authorization": `Bearer ${token}`,
-                        "Content-Type": "application/json",
-                    },
-                });
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("No authentication token found");
+      }
 
-                if (!response.ok) {
-                    throw new Error("Failed to fetch profile");
-                }
+      const response = await fetch("https://procurepro-1.onrender.com/profile/me", {
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
 
-                const data = await response.json();
+      if (!response.ok) {
+        throw new Error("Failed to fetch profile");
+      }
 
-                // Just get company_name
-                const companyName = data.data.company_name;
+      const data = await response.json();
 
-                if (companyName) {
-                    // Set selectedSupplier
-                    setSelectedSupplier(companyName);
-                    // Optionally store in localStorage
-                    localStorage.setItem("company_name", companyName);
+      // Just get company_name
+      const companyName = data.data.company_name;
 
-                    // Find supplier with this name
-                    const supplierWithScore = suppliers.find(
-                        (s) => s.company_name === companyName
-                    );
+      if (companyName) {
+        // Set selectedSupplier
+        setSelectedSupplier(companyName);
 
-                    setReliabilityScore(supplierWithScore?.reliability_score ?? 0);
-                } else {
-                    // Fallback if company_name missing
-                    setSelectedSupplier("");
-                    setReliabilityScore(0);
-                }
-            } catch (error) {
-                console.error("Error fetching profile:", error);
-                toast({
-                    title: "Error",
-                    description: "Failed to load profile data",
-                    variant: "destructive",
-                });
-                // Fallback in case of error
-                setSelectedSupplier("");
-                setReliabilityScore(0);
-            } finally {
+        // Optionally store in localStorage
+        if (typeof window !== "undefined") {
+          localStorage.setItem("company_name", companyName);
+        }
 
-            }
-        };
+        // Find supplier with this name
+        const supplierWithScore = suppliers.find(
+          (s) => s.company_name === companyName
+        );
 
-        // Call the async function
-        fetchProfileAndSetCompany();
-    }, [suppliers]);
+        setReliabilityScore(supplierWithScore?.reliability_score ?? 0);
+      } else {
+        // Fallback if company_name missing
+        setSelectedSupplier("");
+        setReliabilityScore(0);
+      }
+    } catch (error) {
+      console.error("Error fetching profile:", error);
+      toast({
+        title: "Error",
+        description: "Failed to load profile data",
+        variant: "destructive",
+      });
+      // Fallback in case of error
+      setSelectedSupplier("");
+      setReliabilityScore(0);
+    }
+  };
+
+  // Call the async function
+  fetchProfileAndSetCompany();
+}, [suppliers]);
 
 
     // For the pei chart 
@@ -342,12 +345,13 @@ export default function ReliabilityAnalysis() {
     //company
 
     useEffect(() => {
+        if (typeof window === "undefined") return;
         const userData = JSON.parse(localStorage.getItem("userData") || "{}");
 
         if (userData.role === "Supplier") return;
 
         const fetchSuppliers = async () => {
-            const res = await fetch("http://localhost:8000/api/suppliers");
+            const res = await fetch("https://procurepro-1.onrender.com/api/suppliers");
             const data = await res.json();
 
             setSuppliersC(data.suppliers);
@@ -357,6 +361,7 @@ export default function ReliabilityAnalysis() {
     }, []);
 
     useEffect(() => {
+        if (typeof window === "undefined") return;
         const userData = JSON.parse(localStorage.getItem("userData") || "{}");
         if (userData.role === "Supplier") return;
 
@@ -414,6 +419,22 @@ export default function ReliabilityAnalysis() {
     }, [selectedSupplierC, suppliersC]);
 
 
+const [userRole, setUserRole] = useState<string | null>(null);
+
+useEffect(() => {
+  if (typeof window !== "undefined") {
+    const storedData = localStorage.getItem("userData");
+    if (storedData) {
+      try {
+        const parsed = JSON.parse(storedData);
+        setUserRole(parsed?.role || null);
+      } catch (err) {
+        console.error("Error parsing userData:", err);
+        setUserRole(null);
+      }
+    }
+  }
+}, []);
 
 
     return (
@@ -433,7 +454,7 @@ export default function ReliabilityAnalysis() {
                     </p>
                 </motion.div>
 
-                {JSON.parse(localStorage.getItem("userData") || "{}")?.role !== "Supplier" && (
+                {userRole !== "Supplier" && (
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}

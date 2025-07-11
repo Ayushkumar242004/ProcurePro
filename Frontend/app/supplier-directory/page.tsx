@@ -105,6 +105,7 @@ export default function SupplierDirectory() {
     const [overallScore, setOverallScore] = useState(0);
   
     const handleShowOverallScore = async () => {
+      if (typeof window === "undefined") return;
       const esgCategoryRaw = localStorage.getItem("esg_category_scores");
       const remainingRaw = localStorage.getItem("remainingScores");
       const overall_score = localStorage.getItem("overallScore");

@@ -76,7 +76,7 @@ export default function Risk({ supplier }: { supplier: string}) {
             
             try {
                 const encodedName = encodeURIComponent(supplier);
-                const response = await fetch(`http://localhost:8000/suppliers/risk/${encodedName}`);
+                const response = await fetch(`https://procurepro-1.onrender.com/suppliers/risk/${encodedName}`);
                 
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);

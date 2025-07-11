@@ -45,7 +45,7 @@
 //         throw new Error("No authentication token found")
 //       }
 
-//       const response = await fetch("http://localhost:8000/profile/me", {
+//       const response = await fetch("https://procurepro-1.onrender.com/profile/me", {
 //         headers: {
 //           "Authorization": `Bearer ${token}`,
 //           "Content-Type": "application/json"
@@ -88,7 +88,7 @@
 //       setUpdating(true)
 //       const token = localStorage.getItem("token")
       
-//       const response = await fetch("http://localhost:8000/profile/update", {
+//       const response = await fetch("https://procurepro-1.onrender.com/profile/update", {
 //         method: "PATCH",
 //         headers: {
 //           "Authorization": `Bearer ${token}`,
@@ -349,12 +349,13 @@ export default function ProfilePage() {
 
   const fetchProfile = async () => {
     try {
+      if (typeof window === "undefined") return;
       const token = localStorage.getItem("token")
       if (!token) {
         throw new Error("No authentication token found")
       }
 
-      const response = await fetch("http://localhost:8000/profile/me", {
+      const response = await fetch("https://procurepro-1.onrender.com/profile/me", {
         headers: {
           "Authorization": `Bearer ${token}`,
           "Content-Type": "application/json"
@@ -394,9 +395,10 @@ export default function ProfilePage() {
   const handleSaveProfile = async () => {
     try {
       setUpdating(true)
+      if (typeof window === "undefined") return;
       const token = localStorage.getItem("token")
       
-      const response = await fetch("http://localhost:8000/profile/update", {
+      const response = await fetch("https://procurepro-1.onrender.com/profile/update", {
         method: "PATCH",
         headers: {
           "Authorization": `Bearer ${token}`,

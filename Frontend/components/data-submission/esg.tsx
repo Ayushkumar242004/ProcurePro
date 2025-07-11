@@ -23,8 +23,12 @@ const sections = [
   { id: "documents", title: "Documents", icon: FileText, description: "Supporting documentation" }
 ]
 
-const userData = JSON.parse(localStorage.getItem("userData") || "{}");
-const email = userData.email;
+
+type UserData = {
+  email: string;
+  role: string;
+};
+
 
 // Function to disable input feilds 
 const shouldDisableField = (fieldValue: string) => {
@@ -81,6 +85,24 @@ export default function ESG( ){
   const [isLoading, setIsLoading] = useState(false);
   // state to prefill the data 
   const [ hasData , setHasdata ] = useState( false ) ; 
+
+  
+const [userData, setUserData] = useState<UserData | null>(null);
+useEffect(() => {
+  if (typeof window !== "undefined") {
+    const storedData = localStorage.getItem("userData");
+    if (storedData) {
+      try {
+        const parsedData = JSON.parse(storedData);
+        setUserData(parsedData);
+      } catch (err) {
+        console.error("Failed to parse userData from localStorage", err);
+        setUserData(null);
+      }
+    }
+  }
+}, []);
+const email = userData?.email ?? "";
 
   const [expandedSections, setExpandedSections] = useState({
       company: true,
@@ -139,7 +161,7 @@ export default function ESG( ){
     useEffect( ( ) => { 
       const checkData = async ( ) => {
         try{
-          const dbResponse = await fetch('http://localhost:8000/api/get-esg-prefill' , 
+          const dbResponse = await fetch('https://procurepro-1.onrender.com/api/get-esg-prefill' , 
           {
             headers: { "email": email }
           }) ; 
@@ -162,7 +184,7 @@ export default function ESG( ){
 
     const handleFinalESGSubmit = async () => {
     try {
-        const response = await fetch("http://localhost:8000/api/calculate-and-store-esg", {
+        const response = await fetch("https://procurepro-1.onrender.com/api/calculate-and-store-esg", {
         method: "POST",
         headers: {
         "Content-Type": "application/json",
@@ -194,6 +216,7 @@ export default function ESG( ){
 
     const formData = new FormData();
     formData.append("file", file);
+    if (typeof window === "undefined") return;
 
     // Get email from localStorage (or any other auth provider)
     const userData = JSON.parse(localStorage.getItem("userData") || "{}");
@@ -203,7 +226,7 @@ export default function ESG( ){
     console.log("Uploading file:", file.name);
 
     setUploadProgress(30);
-    const response = await fetch("http://localhost:8000/api/submit-esg-report", {
+    const response = await fetch("https://procurepro-1.onrender.com/api/submit-esg-report", {
       method: "POST",
       body: formData,
     });

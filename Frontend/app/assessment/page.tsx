@@ -171,12 +171,13 @@ export default function AssessmentPage() {
   useEffect(() => {
     const fetchProfileAndSetCompany = async () => {
       try {
+        if (typeof window === "undefined") return;
         const token = localStorage.getItem("token");
         if (!token) {
           throw new Error("No authentication token found");
         }
 
-        const response = await fetch("http://localhost:8000/profile/me", {
+        const response = await fetch("https://procurepro-1.onrender.com/profile/me", {
           headers: {
             "Authorization": `Bearer ${token}`,
             "Content-Type": "application/json",
@@ -196,6 +197,7 @@ export default function AssessmentPage() {
           // Set selectedSupplier
           setSelectedSupplier(companyName);
           // Optionally store in localStorage
+          if (typeof window === "undefined") return;
           localStorage.setItem("company_name", companyName);
 
 
@@ -352,7 +354,7 @@ export default function AssessmentPage() {
     try {
       // Compose the prompt with the environmental score
       const prompt = `Current ESG score: ${supplierWithScore?.esg_score} `;
-      const response = await fetch("http://localhost:8000/api/gemini-recommendations-eScore", {
+      const response = await fetch("https://procurepro-1.onrender.com/api/gemini-recommendations-eScore", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -380,7 +382,7 @@ export default function AssessmentPage() {
     try {
       // Compose the prompt with the environmental score
       const prompt = `Current cost Effieciency score: ${supplierWithScore?.cost_score} `;
-      const response = await fetch("http://localhost:8000/api/gemini-recommendations-sScore", {
+      const response = await fetch("https://procurepro-1.onrender.com/api/gemini-recommendations-sScore", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -408,7 +410,7 @@ export default function AssessmentPage() {
     try {
       // Compose the prompt with the environmental score
       const prompt = `Current risk score: ${supplierWithScore?.risk_score}`;
-      const response = await fetch("http://localhost:8000/api/gemini-recommendations-gScore", {
+      const response = await fetch("https://procurepro-1.onrender.com/api/gemini-recommendations-gScore", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -436,7 +438,7 @@ export default function AssessmentPage() {
     try {
       // Compose the prompt with the environmental score
       const prompt = `Current reliability score: ${supplierWithScore?.reliability_score} `;
-      const response = await fetch("http://localhost:8000/api/gemini-recommendations-cScore", {
+      const response = await fetch("https://procurepro-1.onrender.com/api/gemini-recommendations-cScore", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -506,7 +508,7 @@ export default function AssessmentPage() {
 
   useEffect(() => {
     const fetchSuppliers = async () => {
-      const res = await fetch("http://localhost:8000/api/suppliers");
+      const res = await fetch("https://procurepro-1.onrender.com/api/suppliers");
       const data = await res.json();
       console.log("Fetched suppliers:", data.suppliers);
       setSuppliers(data.suppliers);
@@ -543,7 +545,7 @@ export default function AssessmentPage() {
       };
 
       // 4. Send request to backend
-      const response = await fetch("http://localhost:8000/generate-esg-report", {
+      const response = await fetch("https://procurepro-1.onrender.com/generate-esg-report", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

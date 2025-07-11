@@ -30,6 +30,8 @@ export default function EmployeeLogin() {
       if (!res.ok) throw new Error(data.detail || "Login failed")
 
       toast.success("Logged in successfully!")
+      if (typeof window === "undefined") return;
+
       localStorage.setItem("token", data.token) 
         // user object contains email and role 
         localStorage.setItem("userData", JSON.stringify(data.user))
