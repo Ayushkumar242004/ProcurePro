@@ -18,44 +18,47 @@ import {
 function getStatusIcon(score: number) {
     if (score >= 80) {
         return (
-            <div className="flex items-center space-x-1">
-                <CheckCircle className="h-4 w-4 text-green-600" />
-                <span className="text-xs text-green-700">Very poor</span>
+             <div className="flex items-center space-x-1">
+                <AlertCircle className="h-4 w-4 text-red-600" />
+                <span className="text-xs text-red-700">Very poor</span>
             </div>
+
         );
-    } else if (score >= 60) {
-        return (
-            <div className="flex items-center space-x-1">
-                <CheckCircle className="h-4 w-4 text-blue-600" />
-                <span className="text-xs text-blue-700">poor</span>
-            </div>
-        );
-    } else if (score >= 50) {
+    } else if (score >= 45) {
         return (
             <div className="flex items-center space-x-1">
                 <AlertCircle className="h-4 w-4 text-yellow-600" />
-                <span className="text-xs text-yellow-700">fair</span>
+                <span className="text-xs text-yellow-700">poor</span>
+            </div>
+
+        );
+    } else if (score >= 33) {
+        return (
+            <div className="flex items-center space-x-1">
+                <CheckCircle className="h-4 w-4 text-blue-600" />
+                <span className="text-xs text-blue-700">fair</span>
             </div>
         );
     } else {
         return (
             <div className="flex items-center space-x-1">
-                <AlertCircle className="h-4 w-4 text-red-600" />
-                <span className="text-xs text-red-700">good</span>
+                <CheckCircle className="h-4 w-4 text-green-600" />
+                <span className="text-xs text-green-700">Good</span>
             </div>
+
         );
     }
 }
 
 function getStatusColor(score: number) {
-    if (score >= 90) {
-        return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200";
-    } else if (score >= 75) {
-        return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200";
-    } else if (score >= 60) {
-        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200";
+    if (score >= 80) {
+        return "bg-red-100 text-red-700 border-red-300 hover:bg-red-200";
+    } else if (score >= 45) {
+        return "bg-yellow-100 text-yellow-700 border-yellow-300 hover:bg-yellow-200";
+    } else if (score >= 33) {
+        return "bg-blue-100 text-blue-700 border-blue-300 hover:bg-blue-200";
     } else {
-        return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200";
+        return "bg-green-100 text-green-700 border-green-300 hover:bg-green-200";
     }
 }
 
@@ -390,13 +393,13 @@ export default function Risk({ supplier }: { supplier: string}) {
                                                     <div className="flex items-center space-x-2">
                                                         <span className="text-sm font-medium">{Number(item.score).toFixed(1)}/100</span>
                                                         <Badge variant="outline" className={getStatusColor(Number(item.score))}>
-                                                            {Number(item.score) >= 90
-                                                                ? "excellent"
-                                                                : Number(item.score) >= 75
-                                                                    ? "good"
-                                                                    : Number(item.score) >= 60
+                                                            {Number(item.score) >= 80
+                                                                ? "very poor"
+                                                                : Number(item.score) >= 45
+                                                                    ? "poor"
+                                                                    : Number(item.score) >= 33
                                                                         ? "fair"
-                                                                        : "poor"}
+                                                                        : "good"}
                                                         </Badge>
 
                                                     </div>
