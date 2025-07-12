@@ -192,11 +192,11 @@ export default function Risk({ supplier }: { supplier: string}) {
                             variant="outline"
                             className={cn(
                                 "text-md px-5 py-1.5 rounded-full transition-all duration-300",
-                                riskScore !== null && riskScore >= 85
+                                riskScore !== null && riskScore >= 80
                                     ? "bg-red-100 text-red-700 border-red-300 hover:bg-red-200"
-                                    : riskScore !== null && riskScore >= 70
+                                    : riskScore !== null && riskScore >= 45
                                         ? "bg-blue-100 text-blue-700 border-blue-300 hover:bg-blue-200"
-                                        : riskScore !== null && riskScore >= 50
+                                        : riskScore !== null && riskScore >= 33
                                             ? "bg-yellow-100 text-yellow-700 border-yellow-300 hover:bg-yellow-200"
                                             : "bg-green-100 text-green-700 border-green-300 hover:bg-green-200"
                             )}
@@ -204,9 +204,9 @@ export default function Risk({ supplier }: { supplier: string}) {
                             {riskScore !== null
                                 ? riskScore >= 80
                                     ? "Very Poor"
-                                    : riskScore >= 60
+                                    : riskScore >= 45
                                         ? "Poor"
-                                        : riskScore >= 50
+                                        : riskScore >= 33
                                             ? "Fair"
                                             : "Good"
                                 : "N/A"}{" "}
