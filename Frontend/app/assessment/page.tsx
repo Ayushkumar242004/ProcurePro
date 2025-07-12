@@ -562,7 +562,7 @@ export default function AssessmentPage() {
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
-      link.download = `${company_name}_ESG_Report.pdf`;
+      link.download = `${company_name}_Evaluation_Report.pdf`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
