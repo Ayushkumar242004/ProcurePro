@@ -126,7 +126,7 @@ async def generate_esg_report(data: ESGReportInput):
     msg["From"] = "ayukumar242004@gmail.com"
     msg["To"] = "ayush.kumar47@techmahindra.com"
     msg["Subject"] = f"ESG Report for {data.company_name}"
-    msg.attach(MIMEText("Hello,\n\nPlease find attached the ESG report.\n\nRegards,\nProcurePro"))
+    msg.attach(MIMEText("Hello,\n\nPlease find attached the full evaluation report.\n\nRegards,\nProcurePro"))
 
     part = MIMEApplication(pdf_bytes, Name=f"{data.company_name}_ESG_Report.pdf")
     part["Content-Disposition"] = f'attachment; filename="{data.company_name}_ESG_Report.pdf"'
@@ -146,6 +146,6 @@ async def generate_esg_report(data: ESGReportInput):
         buffer,
         media_type="application/pdf",
         headers={
-            "Content-Disposition": f'attachment; filename="{data.company_name}_ESG_Report.pdf"'
+            "Content-Disposition": f'attachment; filename="{data.company_name}_Evaluation_Report.pdf"'
         },
     )
