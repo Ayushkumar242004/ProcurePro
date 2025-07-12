@@ -57,7 +57,7 @@ async def generate_esg_report(data: ESGReportInput):
         alignment=1,  # Centered
         textColor=colors.HexColor("#0B3954"),
     )
-    elements.append(Paragraph(f"ESG Evaluation Report - {data.company_name}", title_style))
+    elements.append(Paragraph(f"ProcurePro Evaluation Report - {data.company_name}", title_style))
     elements.append(Spacer(1, 20))
 
     # 3. Scores Table
@@ -100,16 +100,16 @@ async def generate_esg_report(data: ESGReportInput):
 
     elements.append(Paragraph("AI Recommendations", suggestion_title_style))
 
-    elements.append(Paragraph("Environmental (E):", suggestion_title_style))
+    elements.append(Paragraph("ESG Recommendations:", suggestion_title_style))
     elements.append(Paragraph(data.aiSuggestionE.replace('\n', '<br/>'), suggestion_text_style))
 
-    elements.append(Paragraph("Social (S):", suggestion_title_style))
+    elements.append(Paragraph("Cost Efficiency Recommendations:", suggestion_title_style))
     elements.append(Paragraph(data.aiSuggestionS.replace('\n', '<br/>'), suggestion_text_style))
 
-    elements.append(Paragraph("Governance (G):", suggestion_title_style))
+    elements.append(Paragraph("Overall Risk Recommendations:", suggestion_title_style))
     elements.append(Paragraph(data.aiSuggestionG.replace('\n', '<br/>'), suggestion_text_style))
 
-    elements.append(Paragraph("Cost & Reliability (C):", suggestion_title_style))
+    elements.append(Paragraph("Reliability Recommendations:", suggestion_title_style))
     elements.append(Paragraph(data.aiSuggestionC.replace('\n', '<br/>'), suggestion_text_style))
 
     # 5. Footer
