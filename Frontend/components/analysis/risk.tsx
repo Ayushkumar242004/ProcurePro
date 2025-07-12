@@ -16,21 +16,21 @@ import {
 } from "recharts"
 
 function getStatusIcon(score: number) {
-    if (score >= 90) {
+    if (score >= 80) {
         return (
             <div className="flex items-center space-x-1">
                 <CheckCircle className="h-4 w-4 text-green-600" />
-                <span className="text-xs text-green-700">excellent</span>
-            </div>
-        );
-    } else if (score >= 75) {
-        return (
-            <div className="flex items-center space-x-1">
-                <CheckCircle className="h-4 w-4 text-blue-600" />
-                <span className="text-xs text-blue-700">good</span>
+                <span className="text-xs text-green-700">Very poor</span>
             </div>
         );
     } else if (score >= 60) {
+        return (
+            <div className="flex items-center space-x-1">
+                <CheckCircle className="h-4 w-4 text-blue-600" />
+                <span className="text-xs text-blue-700">poor</span>
+            </div>
+        );
+    } else if (score >= 50) {
         return (
             <div className="flex items-center space-x-1">
                 <AlertCircle className="h-4 w-4 text-yellow-600" />
@@ -41,7 +41,7 @@ function getStatusIcon(score: number) {
         return (
             <div className="flex items-center space-x-1">
                 <AlertCircle className="h-4 w-4 text-red-600" />
-                <span className="text-xs text-red-700">poor</span>
+                <span className="text-xs text-red-700">good</span>
             </div>
         );
     }
@@ -193,22 +193,22 @@ export default function Risk({ supplier }: { supplier: string}) {
                             className={cn(
                                 "text-md px-5 py-1.5 rounded-full transition-all duration-300",
                                 riskScore !== null && riskScore >= 85
-                                    ? "bg-green-100 text-green-700 border-green-300 hover:bg-green-200"
+                                    ? "bg-red-100 text-red-700 border-red-300 hover:bg-red-200"
                                     : riskScore !== null && riskScore >= 70
                                         ? "bg-blue-100 text-blue-700 border-blue-300 hover:bg-blue-200"
                                         : riskScore !== null && riskScore >= 50
                                             ? "bg-yellow-100 text-yellow-700 border-yellow-300 hover:bg-yellow-200"
-                                            : "bg-red-100 text-red-700 border-red-300 hover:bg-red-200"
+                                            : "bg-green-100 text-green-700 border-green-300 hover:bg-green-200"
                             )}
                         >
                             {riskScore !== null
-                                ? riskScore >= 85
-                                    ? "Excellent"
-                                    : riskScore >= 70
-                                        ? "Good"
+                                ? riskScore >= 80
+                                    ? "Very Poor"
+                                    : riskScore >= 60
+                                        ? "Poor"
                                         : riskScore >= 50
                                             ? "Fair"
-                                            : "Poor"
+                                            : "Good"
                                 : "N/A"}{" "}
                             Performance
                         </Badge>
